@@ -1,25 +1,21 @@
-FROM node:20-alpine
+FROM node:20-bookworm
 
 WORKDIR /app
 
-# Install build tools for better-sqlite3 native module
-RUN apk add --no-cache python3 make g++
+# Build tools for better-sqlite3
+RUN apt-get update && apt-get install -y python3 make g++ && rm -rf /var/lib/apt/lists/*
 
-# Copy package files and install all dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the app
 COPY . .
 
-# Build the SvelteKit app
+# Build app
 RUN npm run build
 
-# Create data directory for SQLite
-RUN mkdir -p data
+# Runtime configuration
+ENV DB_PATH=/railway/storage/data/grocery.db
+ENV PORT=3000
 
-# Railway expects the app on port 3000
 EXPOSE 3000
-
-# Start the preview server
-CMD ["npm", "run", "preview"]
+CMD ["node", "build"]

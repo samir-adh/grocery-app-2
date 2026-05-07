@@ -13,6 +13,13 @@
 	let editingId: number | null = $state(null);
 	let editName = $state('');
 
+	// Sort states
+	type NameSort = 'none' | 'asc' | 'desc';
+	type StatusSort = 'none' | 'to-buy' | 'bought';
+	
+	let nameSort: NameSort = $state('none');
+	let statusSort: StatusSort = $state('none');
+
 	const normalize = (s: string) =>
 		s
 			.toLowerCase()
@@ -21,9 +28,64 @@
 
 	const filtered = $derived.by(() => {
 		const q = normalize(query.trim());
-		if (!q) return data.items;
-		return data.items.filter((i) => normalize(i.name).includes(q));
+		let items = q ? data.items.filter((i) => normalize(i.name).includes(q)) : data.items;
+		
+		// Apply name sorting
+		if (nameSort !== 'none') {
+			items = [...items].sort((a, b) => {
+				const aName = normalize(a.name);
+				const bName = normalize(b.name);
+				if (aName === bName) return a.id - b.id;
+				return nameSort === 'asc' 
+					? aName.localeCompare(bName) 
+					: bName.localeCompare(aName);
+			});
+		}
+		
+		// Apply status sorting
+		if (statusSort !== 'none') {
+			items = [...items].sort((a, b) => {
+				if (a.bought === b.bought) return a.id - b.id;
+				return statusSort === 'to-buy' 
+					? (a.bought ? 1 : -1) 
+					: (b.bought ? 1 : -1);
+			});
+		}
+		
+		return items;
 	});
+
+	function cycleNameSort() {
+		nameSort = nameSort === 'none' ? 'asc' : nameSort === 'asc' ? 'desc' : 'none';
+	}
+
+	function cycleStatusSort() {
+		statusSort = statusSort === 'none' ? 'to-buy' : statusSort === 'to-buy' ? 'bought' : 'none';
+	}
+
+	function getNameSortLabel() {
+		if (nameSort === 'asc') return 'A → Z';
+		if (nameSort === 'desc') return 'Z → A';
+		return 'Trier par nom';
+	}
+
+	function getStatusSortLabel() {
+		if (statusSort === 'to-buy') return 'à acheter en premier';
+		if (statusSort === 'bought') return 'acheté en premier';
+		return 'Trier par statut';
+	}
+
+	function getNameSortIcon() {
+		if (nameSort === 'none') return '↕';
+		if (nameSort === 'asc') return '↑';
+		return '↓';
+	}
+
+	function getStatusSortIcon() {
+		if (statusSort === 'none') return '↕';
+		if (statusSort === 'to-buy') return '↓';
+		return '↑';
+	}
 
 	async function openAdd() {
 		addName = query;
@@ -118,30 +180,24 @@
 		<table>
 			<thead>
 				<tr>
-					<th class="col-status">Statut</th>
-					<th>Nom</th>
+					<th>
+						Nom
+						<button type="button" onclick={cycleNameSort} class="sort-icon" aria-label={getNameSortLabel()}>
+							{getNameSortIcon()}
+						</button>
+					</th>
+					<th class="col-status">
+						Statut
+						<button type="button" onclick={cycleStatusSort} class="sort-icon" aria-label={getStatusSortLabel()}>
+							{getStatusSortIcon()}
+						</button>
+					</th>
 					<th class="col-actions">Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				{#each filtered as item (item.id)}
 					<tr class:bought={item.bought}>
-						<td class="col-status">
-							<form method="post" action="?/toggle" use:enhance>
-								<input type="hidden" name="id" value={item.id} />
-								<label class="status">
-									<input
-										type="checkbox"
-										checked={item.bought}
-										onchange={(e) => e.currentTarget.form?.requestSubmit()}
-										aria-label={item.bought
-											? `Marquer ${item.name} comme à acheter`
-											: `Marquer ${item.name} comme acheté`}
-									/>
-									<span>{item.bought ? 'acheté' : 'à acheter'}</span>
-								</label>
-							</form>
-						</td>
 						<td>
 							{#if editingId === item.id}
 								<form
@@ -177,15 +233,40 @@
 								<span class="name">{item.name}</span>
 							{/if}
 						</td>
+						<td class="col-status">
+							<form method="post" action="?/toggle" use:enhance>
+								<input type="hidden" name="id" value={item.id} />
+								<label class="status">
+									<input
+										type="checkbox"
+										checked={item.bought}
+										onchange={(e) => e.currentTarget.form?.requestSubmit()}
+										aria-label={item.bought
+											? `Marquer ${item.name} comme à acheter`
+											: `Marquer ${item.name} comme acheté`}
+									/>
+									<span>{item.bought ? 'acheté' : 'à acheter'}</span>
+								</label>
+							</form>
+						</td>
 						<td class="col-actions">
 							{#if editingId !== item.id}
-								<button type="button" onclick={() => startEdit(item.id, item.name)}>
-									Renommer
+								<button 
+									type="button" 
+									onclick={() => startEdit(item.id, item.name)}
+									aria-label="Renommer {item.name}"
+									class="icon-button"
+								>
+									✏️
 								</button>
 								<form method="post" action="?/delete" use:enhance class="inline">
 									<input type="hidden" name="id" value={item.id} />
-									<button type="submit" class="danger" aria-label="Supprimer {item.name}">
-										Supprimer
+									<button 
+										type="submit" 
+										class="danger icon-button"
+										aria-label="Supprimer {item.name}"
+									>
+										🗑️
 									</button>
 								</form>
 							{/if}
@@ -367,5 +448,29 @@
 	.rename-form button {
 		padding: 0.3rem 0.6rem;
 		font-size: 0.85rem;
+	}
+
+	.icon-button {
+		padding: 0.3rem;
+		font-size: 1.1rem;
+		width: 2.2rem;
+		height: 2.2rem;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.sort-icon {
+		background: none;
+		border: none;
+		font-size: 0.9rem;
+		color: #666;
+		cursor: pointer;
+		padding: 0 0 0 0.4rem;
+		line-height: 1;
+	}
+
+	.sort-icon:hover {
+		color: #1a1a1a;
 	}
 </style>

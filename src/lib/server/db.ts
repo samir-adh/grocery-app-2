@@ -2,7 +2,7 @@ import Database from 'better-sqlite3';
 import { mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 
-const DB_PATH = 'data/grocery.db';
+const DB_PATH = process.env.DB_PATH || 'data/grocery.db';
 
 mkdirSync(dirname(DB_PATH), { recursive: true });
 
