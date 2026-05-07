@@ -30,26 +30,35 @@
 		const q = normalize(query.trim());
 		let items = q ? data.items.filter((i) => normalize(i.name).includes(q)) : data.items;
 		
-		// Apply name sorting
-		if (nameSort !== 'none') {
-			items = [...items].sort((a, b) => {
-				const aName = normalize(a.name);
-				const bName = normalize(b.name);
-				if (aName === bName) return a.id - b.id;
-				return nameSort === 'asc' 
-					? aName.localeCompare(bName) 
-					: bName.localeCompare(aName);
-			});
-		}
+		// Only apply sorting if explicitly enabled
+		const hasSorting = nameSort !== 'none' || statusSort !== 'none';
 		
-		// Apply status sorting
-		if (statusSort !== 'none') {
-			items = [...items].sort((a, b) => {
-				if (a.bought === b.bought) return a.id - b.id;
-				return statusSort === 'to-buy' 
-					? (a.bought ? 1 : -1) 
-					: (b.bought ? 1 : -1);
-			});
+		if (hasSorting) {
+			// Apply name sorting
+			if (nameSort !== 'none') {
+				items = [...items].sort((a, b) => {
+					const aName = normalize(a.name);
+					const bName = normalize(b.name);
+					if (aName === bName) return a.id - b.id;
+					return nameSort === 'asc' 
+						? aName.localeCompare(bName) 
+						: bName.localeCompare(aName);
+				});
+			}
+			
+			// Apply status sorting
+			if (statusSort !== 'none') {
+				items = [...items].sort((a, b) => {
+					if (a.bought === b.bought) return a.id - b.id;
+					return statusSort === 'to-buy' 
+						? (a.bought ? 1 : -1) 
+						: (b.bought ? 1 : -1);
+				});
+			}
+		} else {
+			// When no sorting is active, use stable id order
+			// This prevents reordering when item status changes
+			items = [...items].sort((a, b) => a.id - b.id);
 		}
 		
 		return items;
@@ -280,12 +289,17 @@
 
 <style>
 	:global(body) {
-		font-family: 'Pixel Operator', 'Press Start 2P', sans-serif;
+		font-family: 'VT323', 'Courier New', monospace;
 		background: linear-gradient(135deg, #fff0f5 0%, #fdf2f8 100%);
 		margin: 0;
 		color: #374151;
 		min-height: 100vh;
 		image-rendering: pixelated;
+	}
+
+	/* Fallback for content with special characters */
+	:global(input), :global(button), :global(textarea), :global(select) {
+		font-family: 'Inter', sans-serif;
 	}
 
 	/* Pixel font fallback for inputs */
@@ -301,10 +315,10 @@
 
 	h1 {
 		margin: 0 0 1.5rem;
-		font-size: 2.5rem;
+		font-size: 5rem;
 		color: #f472b6;
 		letter-spacing: 0.05em;
-		text-shadow: 2px 2px 0 #fff, -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff;
+		text-shadow: 3px 3px 0 #fff, -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff;
 		font-weight: normal;
 	}
 
@@ -323,10 +337,10 @@
 	.toolbar input {
 		flex: 1;
 		min-width: 200px;
-		padding: 0.75rem 1rem;
+		padding: 0.875rem 1.25rem;
 		border: 2px solid #fbcfe8;
 		border-radius: 6px;
-		font-size: 1.1rem;
+		font-size: 1.25rem;
 		background: rgba(255, 255, 255, 0.9);
 		color: #475569;
 	}
@@ -338,13 +352,13 @@
 	}
 
 	button {
-		padding: 0.75rem 1.5rem;
+		padding: 0.875rem 1.75rem;
 		border: 2px solid #fbcfe8;
 		background: #f8b4cb;
 		border-radius: 6px;
 		cursor: pointer;
-		font-size: 1.1rem;
-		font-family: 'Pixel Operator', sans-serif;
+		font-size: 1.25rem;
+		font-family: 'VT323', 'Courier New', monospace;
 		font-weight: normal;
 		color: #1f2937;
 		transition: all 0.15s ease;
@@ -390,13 +404,13 @@
 
 	.add-form input[type='text'] {
 		flex: 1;
-		padding: 0.75rem 1rem;
+		padding: 0.875rem 1.25rem;
 		border: 2px solid #fbcfe8;
 		border-radius: 6px;
-		font-size: 1.1rem;
+		font-size: 1.25rem;
 		background: rgba(255, 255, 255, 0.95);
 		color: #475569;
-		font-family: 'Inter', sans-serif;
+		font-family: 'VT323', 'Courier New', monospace;
 	}
 
 	.add-form input[type='text']:focus {
@@ -407,23 +421,23 @@
 	.error {
 		color: #7f1d1d;
 		background: rgba(252, 165, 165, 0.3);
-		padding: 1rem 1.25rem;
+		padding: 1.25rem 1.5rem;
 		border: 2px solid #f87171;
 		border-radius: 6px;
 		margin: 0.75rem 0;
-		font-size: 1rem;
-		font-family: 'Pixel Operator', sans-serif;
+		font-size: 1.25rem;
+		font-family: 'VT323', 'Courier New', monospace;
 	}
 
 	.empty {
 		color: #a0aec0;
 		text-align: center;
-		padding: 3rem 1.5rem;
+		padding: 4rem 2rem;
 		background: rgba(255, 255, 255, 0.6);
 		border: 2px dashed #fbcfe8;
 		border-radius: 8px;
-		font-size: 1.1rem;
-		font-family: 'Pixel Operator', sans-serif;
+		font-size: 1.25rem;
+		font-family: 'VT323', 'Courier New', monospace;
 	}
 
 	table {
@@ -440,17 +454,17 @@
 	th,
 	td {
 		text-align: left;
-		padding: 1rem 1.25rem;
+		padding: .5rem 1.1rem;
 		vertical-align: middle;
 		border-bottom: 1px solid #fbcfe8;
 		color: #475569;
-		font-family: 'Pixel Operator', sans-serif;
-		font-size: 1rem;
+		font-family: 'VT323', 'Courier New', monospace;
+		font-size: 1.25rem;
 	}
 
 	thead th {
 		background: rgba(255, 255, 255, 0.8);
-		font-size: 0.9rem;
+		font-size: 1.25rem;
 		font-weight: normal;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
@@ -483,10 +497,10 @@
 	}
 
 	.col-actions button {
-		padding: 0.5rem;
-		font-size: 1.2rem;
-		width: 2.5rem;
-		height: 2.5rem;
+		padding: 0.6rem;
+		font-size: 1.4rem;
+		width: 2.75rem;
+		height: 2.75rem;
 		background: rgba(255, 255, 255, 0.8);
 		color: #ec4899;
 		border: 2px solid #fbcfe8;
@@ -517,10 +531,10 @@
 		align-items: center;
 		gap: 0.5rem;
 		cursor: pointer;
-		padding: 0.3rem 0.6rem;
+		padding: 0.4rem 0.75rem;
 		border-radius: 6px;
-		font-family: 'Pixel Operator', sans-serif;
-		font-size: 0.9rem;
+		font-family: 'VT323', 'Courier New', monospace;
+		font-size: 1.25rem;
 	}
 
 	.status:hover {
@@ -539,11 +553,12 @@
 
 	/* Status badge colors - pastel */
 	.status span {
-		padding: 0.3rem 0.75rem;
+		padding: 0.4rem 0.875rem;
 		border-radius: 12px;
-		font-size: 0.85rem;
+		font-size: 1.25rem;
 		font-weight: normal;
 		border: 1px solid #fbcfe8;
+		font-family: 'VT323', 'Courier New', monospace;
 	}
 
 	.status input:checked + span {
@@ -568,13 +583,13 @@
 
 	.rename-form input[type='text'] {
 		flex: 1;
-		padding: 0.5rem 0.75rem;
+		padding: 0.6rem 0.875rem;
 		border: 2px solid #fbcfe8;
 		border-radius: 6px;
-		font-size: 1rem;
+		font-size: 1.25rem;
 		background: rgba(255, 255, 255, 0.95);
 		color: #475569;
-		font-family: 'Inter', sans-serif;
+		font-family: 'VT323', 'Courier New', monospace;
 	}
 
 	.rename-form input[type='text']:focus {
@@ -583,12 +598,12 @@
 	}
 
 	.rename-form button {
-		padding: 0.4rem 0.75rem;
-		font-size: 0.85rem;
+		padding: 0.5rem 0.875rem;
+		font-size: 1rem;
 		background: rgba(255, 255, 255, 0.8);
 		color: #ec4899;
 		border: 2px solid #fbcfe8;
-		font-family: 'Pixel Operator', sans-serif;
+		font-family: 'VT323', 'Courier New', monospace;
 		border-radius: 4px;
 	}
 
@@ -598,10 +613,10 @@
 	}
 
 	.icon-button {
-		padding: 0.4rem;
-		font-size: 1.3rem;
-		width: 2.5rem;
-		height: 2.5rem;
+		padding: 0.5rem;
+		font-size: 1.5rem;
+		width: 2.75rem;
+		height: 2.75rem;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -622,12 +637,12 @@
 	.sort-icon {
 		background: none;
 		border: none;
-		font-size: 1rem;
+		font-size: 1.25rem;
 		color: #ec4899;
 		cursor: pointer;
-		padding: 0 0 0 0.5rem;
+		padding: 0 0 0 0.6rem;
 		line-height: 1;
-		font-family: 'Pixel Operator', sans-serif;
+		font-family: 'VT323', 'Courier New', monospace;
 	}
 
 	.sort-icon:hover {
