@@ -280,11 +280,17 @@
 
 <style>
 	:global(body) {
-		font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-		background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+		font-family: 'Pixel Operator', 'Press Start 2P', sans-serif;
+		background: linear-gradient(135deg, #fff0f5 0%, #fdf2f8 100%);
 		margin: 0;
-		color: #1e293b;
+		color: #374151;
 		min-height: 100vh;
+		image-rendering: pixelated;
+	}
+
+	/* Pixel font fallback for inputs */
+	:global(input), :global(button), :global(textarea), :global(select) {
+		font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 	}
 
 	main {
@@ -295,10 +301,11 @@
 
 	h1 {
 		margin: 0 0 1.5rem;
-		font-size: 1.75rem;
-		font-weight: 700;
-		color: #0f172a;
-		letter-spacing: -0.02em;
+		font-size: 2.5rem;
+		color: #f472b6;
+		letter-spacing: 0.05em;
+		text-shadow: 2px 2px 0 #fff, -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff;
+		font-weight: normal;
 	}
 
 	.toolbar {
@@ -306,53 +313,68 @@
 		gap: 0.75rem;
 		margin-bottom: 1.25rem;
 		flex-wrap: wrap;
+		background: rgba(255, 255, 255, 0.6);
+		padding: 0.75rem;
+		border: 2px solid #fbcfe8;
+		border-radius: 8px;
+		box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
 	}
 
 	.toolbar input {
 		flex: 1;
 		min-width: 200px;
-		padding: 0.65rem 0.875rem;
-		border: 1px solid #cbd5e1;
-		border-radius: 8px;
-		font-size: 0.95rem;
-		background: #fff;
-		transition: all 0.2s ease;
+		padding: 0.75rem 1rem;
+		border: 2px solid #fbcfe8;
+		border-radius: 6px;
+		font-size: 1.1rem;
+		background: rgba(255, 255, 255, 0.9);
+		color: #475569;
 	}
 
 	.toolbar input:focus {
 		outline: none;
-		border-color: #34d399;
-		box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1);
+		border-color: #f472b6;
+		box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2);
 	}
 
 	button {
-		padding: 0.65rem 1rem;
-		border: none;
-		background: #34d399;
-		border-radius: 8px;
+		padding: 0.75rem 1.5rem;
+		border: 2px solid #fbcfe8;
+		background: #f8b4cb;
+		border-radius: 6px;
 		cursor: pointer;
-		font-size: 0.9rem;
-		font-weight: 500;
-		color: #fff;
-		transition: all 0.2s ease;
+		font-size: 1.1rem;
+		font-family: 'Pixel Operator', sans-serif;
+		font-weight: normal;
+		color: #1f2937;
+		transition: all 0.15s ease;
 		white-space: nowrap;
+		box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
 	}
 
 	button:hover {
-		background: #22c55e;
+		background: #f472b6;
 		transform: translateY(-1px);
+		box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.15);
+		color: #fff;
+		border-color: #ec4899;
 	}
 
 	button:active {
 		transform: translateY(0);
+		box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
 	}
 
 	button.danger {
-		background: #f87171;
+		background: #fca5a5;
+		color: #7f1d1d;
+		border-color: #f87171;
 	}
 
 	button.danger:hover {
-		background: #ef4444;
+		background: #f87171;
+		color: #fff;
+		border-color: #ef4444;
 	}
 
 	.add-form {
@@ -360,71 +382,82 @@
 		gap: 0.75rem;
 		margin-bottom: 1.25rem;
 		padding: 1rem;
-		background: #fff;
-		border-radius: 12px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+		background: rgba(255, 255, 255, 0.7);
+		border: 2px solid #fbcfe8;
+		border-radius: 8px;
+		box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
 	}
 
 	.add-form input[type='text'] {
 		flex: 1;
-		padding: 0.65rem 0.875rem;
-		border: 1px solid #cbd5e1;
-		border-radius: 8px;
-		font-size: 0.95rem;
-		background: #fff;
+		padding: 0.75rem 1rem;
+		border: 2px solid #fbcfe8;
+		border-radius: 6px;
+		font-size: 1.1rem;
+		background: rgba(255, 255, 255, 0.95);
+		color: #475569;
+		font-family: 'Inter', sans-serif;
 	}
 
 	.add-form input[type='text']:focus {
 		outline: none;
-		border-color: #34d399;
+		border-color: #f472b6;
 	}
 
 	.error {
-		color: #b91c1c;
-		background: #fee2e2;
-		padding: 0.75rem 1rem;
-		border-radius: 8px;
+		color: #7f1d1d;
+		background: rgba(252, 165, 165, 0.3);
+		padding: 1rem 1.25rem;
+		border: 2px solid #f87171;
+		border-radius: 6px;
 		margin: 0.75rem 0;
-		font-size: 0.9rem;
+		font-size: 1rem;
+		font-family: 'Pixel Operator', sans-serif;
 	}
 
 	.empty {
-		color: #64748b;
+		color: #a0aec0;
 		text-align: center;
 		padding: 3rem 1.5rem;
-		background: #fff;
-		border: 2px dashed #cbd5e1;
-		border-radius: 12px;
-		font-size: 0.95rem;
+		background: rgba(255, 255, 255, 0.6);
+		border: 2px dashed #fbcfe8;
+		border-radius: 8px;
+		font-size: 1.1rem;
+		font-family: 'Pixel Operator', sans-serif;
 	}
 
 	table {
 		width: 100%;
 		border-collapse: separate;
 		border-spacing: 0;
-		background: #fff;
-		border-radius: 12px;
+		background: rgba(255, 255, 255, 0.7);
+		border: 2px solid #fbcfe8;
+		border-radius: 8px;
 		overflow: hidden;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+		box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
 	}
 
 	th,
 	td {
 		text-align: left;
-		padding: 0.875rem 1rem;
+		padding: 1rem 1.25rem;
 		vertical-align: middle;
-		border-bottom: 1px solid #e2e8f0;
+		border-bottom: 1px solid #fbcfe8;
+		color: #475569;
+		font-family: 'Pixel Operator', sans-serif;
+		font-size: 1rem;
 	}
 
 	thead th {
-		background: #f8fafc;
-		font-size: 0.75rem;
-		font-weight: 600;
+		background: rgba(255, 255, 255, 0.8);
+		font-size: 0.9rem;
+		font-weight: normal;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
-		color: #475569;
-		padding-top: 0.75rem;
-		padding-bottom: 0.75rem;
+		color: #f472b6;
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+		border-bottom: 2px solid #fbcfe8;
 	}
 
 	tbody tr:last-child td {
@@ -436,7 +469,7 @@
 	}
 
 	tbody tr:hover {
-		background: #f8fafc;
+		background: rgba(254, 205, 232, 0.3);
 	}
 
 	.col-status {
@@ -444,30 +477,35 @@
 	}
 
 	.col-actions {
-		width: 8rem;
+		width: 7rem;
 		text-align: right;
 		white-space: nowrap;
 	}
 
 	.col-actions button {
-		padding: 0.4rem;
-		font-size: 1rem;
+		padding: 0.5rem;
+		font-size: 1.2rem;
 		width: 2.5rem;
 		height: 2.5rem;
-		background: #f1f5f9;
-		color: #475569;
-		border-radius: 8px;
+		background: rgba(255, 255, 255, 0.8);
+		color: #ec4899;
+		border: 2px solid #fbcfe8;
+		border-radius: 6px;
+		font-family: sans-serif;
+		box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
 	}
 
 	.col-actions button:hover {
-		background: #e2e8f0;
-		color: #0f172a;
+		background: rgba(248, 180, 203, 0.8);
+		color: #f472b6;
 		transform: none;
+		box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
 	}
 
 	.col-actions .danger:hover {
-		background: #fee2e2;
-		color: #b91c1c;
+		background: rgba(252, 165, 165, 0.8);
+		color: #f87171;
+		border-color: #f472b6;
 	}
 
 	.col-actions form.inline {
@@ -479,100 +517,125 @@
 		align-items: center;
 		gap: 0.5rem;
 		cursor: pointer;
-		padding: 0.25rem 0.5rem;
+		padding: 0.3rem 0.6rem;
 		border-radius: 6px;
-		transition: all 0.2s ease;
+		font-family: 'Pixel Operator', sans-serif;
+		font-size: 0.9rem;
 	}
 
 	.status:hover {
-		background: #f1f5f9;
+		background: rgba(255, 255, 255, 0.5);
+	}
+
+	.status input {
+		accent-color: #f472b6;
+		width: 1.3rem;
+		height: 1.3rem;
 	}
 
 	tr.bought .name {
-		text-decoration: line-through;
-		color: #94a3b8;
+		color: #a0aec0;
 	}
 
-	/* Status badge colors */
+	/* Status badge colors - pastel */
 	.status span {
-		padding: 0.2rem 0.5rem;
+		padding: 0.3rem 0.75rem;
 		border-radius: 12px;
-		font-size: 0.8rem;
-		font-weight: 500;
+		font-size: 0.85rem;
+		font-weight: normal;
+		border: 1px solid #fbcfe8;
 	}
 
 	.status input:checked + span {
-		background: #dcfce7;
+		background: rgba(167, 243, 208, 0.4);
 		color: #166534;
+		border-color: #bbf7d0;
 	}
 
 	.status input:not(:checked) + span {
-		background: #fee2e2;
-		color: #991b1b;
+		background: rgba(254, 215, 170, 0.4);
+		color: #92400e;
+		border-color: #fed7aa;
 	}
 
 	.rename-form {
 		display: flex;
 		gap: 0.5rem;
 		padding: 0.25rem;
+		background: rgba(255, 255, 255, 0.8);
+		border-radius: 6px;
 	}
 
 	.rename-form input[type='text'] {
 		flex: 1;
 		padding: 0.5rem 0.75rem;
-		border: 1px solid #cbd5e1;
+		border: 2px solid #fbcfe8;
 		border-radius: 6px;
-		font-size: 0.9rem;
-		background: #fff;
+		font-size: 1rem;
+		background: rgba(255, 255, 255, 0.95);
+		color: #475569;
+		font-family: 'Inter', sans-serif;
 	}
 
 	.rename-form input[type='text']:focus {
 		outline: none;
-		border-color: #34d399;
+		border-color: #f472b6;
 	}
 
 	.rename-form button {
 		padding: 0.4rem 0.75rem;
 		font-size: 0.85rem;
-		background: #e2e8f0;
-		color: #475569;
+		background: rgba(255, 255, 255, 0.8);
+		color: #ec4899;
+		border: 2px solid #fbcfe8;
+		font-family: 'Pixel Operator', sans-serif;
+		border-radius: 4px;
 	}
 
 	.rename-form button:hover {
-		background: #cbd5e1;
+		background: rgba(248, 180, 203, 0.8);
+		color: #f472b6;
 	}
 
 	.icon-button {
-		padding: 0.3rem;
-		font-size: 1.1rem;
-		width: 2.2rem;
-		height: 2.2rem;
+		padding: 0.4rem;
+		font-size: 1.3rem;
+		width: 2.5rem;
+		height: 2.5rem;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		background: #f1f5f9;
-		border-radius: 8px;
-		color: #475569;
-		transition: all 0.2s ease;
+		background: rgba(255, 255, 255, 0.8);
+		border: 2px solid #fbcfe8;
+		border-radius: 6px;
+		color: #ec4899;
+		font-family: sans-serif;
+		box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
 	}
 
 	.icon-button:hover {
-		background: #e2e8f0;
-		color: #0f172a;
+		background: rgba(248, 180, 203, 0.8);
+		color: #f472b6;
+		box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.15);
 	}
 
 	.sort-icon {
 		background: none;
 		border: none;
-		font-size: 0.85rem;
-		color: #64748b;
+		font-size: 1rem;
+		color: #ec4899;
 		cursor: pointer;
 		padding: 0 0 0 0.5rem;
 		line-height: 1;
-		transition: all 0.2s ease;
+		font-family: 'Pixel Operator', sans-serif;
 	}
 
 	.sort-icon:hover {
-		color: #0f172a;
+		color: #f472b6;
+	}
+
+	/* Pixel art effect for sharp edges */
+	* {
+		image-rendering: crisp-edges;
 	}
 </style>
