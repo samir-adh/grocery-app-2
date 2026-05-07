@@ -280,14 +280,11 @@
 
 <style>
 	:global(body) {
-		font-family:
-			system-ui,
-			-apple-system,
-			'Segoe UI',
-			sans-serif;
-		background: #fafafa;
+		font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+		background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
 		margin: 0;
-		color: #1a1a1a;
+		color: #1e293b;
+		min-height: 100vh;
 	}
 
 	main {
@@ -297,108 +294,149 @@
 	}
 
 	h1 {
-		margin: 0 0 1.25rem;
-		font-size: 1.5rem;
+		margin: 0 0 1.5rem;
+		font-size: 1.75rem;
+		font-weight: 700;
+		color: #0f172a;
+		letter-spacing: -0.02em;
 	}
 
 	.toolbar {
 		display: flex;
-		gap: 0.5rem;
-		margin-bottom: 0.75rem;
+		gap: 0.75rem;
+		margin-bottom: 1.25rem;
+		flex-wrap: wrap;
 	}
 
 	.toolbar input {
 		flex: 1;
-		padding: 0.5rem 0.75rem;
-		border: 1px solid #d0d0d0;
-		border-radius: 6px;
-		font-size: 1rem;
+		min-width: 200px;
+		padding: 0.65rem 0.875rem;
+		border: 1px solid #cbd5e1;
+		border-radius: 8px;
+		font-size: 0.95rem;
+		background: #fff;
+		transition: all 0.2s ease;
+	}
+
+	.toolbar input:focus {
+		outline: none;
+		border-color: #34d399;
+		box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.1);
 	}
 
 	button {
-		padding: 0.5rem 0.9rem;
-		border: 1px solid #d0d0d0;
-		background: #fff;
-		border-radius: 6px;
+		padding: 0.65rem 1rem;
+		border: none;
+		background: #34d399;
+		border-radius: 8px;
 		cursor: pointer;
-		font-size: 0.95rem;
+		font-size: 0.9rem;
+		font-weight: 500;
+		color: #fff;
+		transition: all 0.2s ease;
+		white-space: nowrap;
 	}
 
 	button:hover {
-		background: #f0f0f0;
+		background: #22c55e;
+		transform: translateY(-1px);
+	}
+
+	button:active {
+		transform: translateY(0);
 	}
 
 	button.danger {
-		color: #b00020;
+		background: #f87171;
 	}
 
 	button.danger:hover {
-		background: #fde7eb;
+		background: #ef4444;
 	}
 
 	.add-form {
 		display: flex;
-		gap: 0.5rem;
-		margin-bottom: 0.75rem;
-		padding: 0.75rem;
+		gap: 0.75rem;
+		margin-bottom: 1.25rem;
+		padding: 1rem;
 		background: #fff;
-		border: 1px solid #e0e0e0;
-		border-radius: 6px;
+		border-radius: 12px;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 	}
 
 	.add-form input[type='text'] {
 		flex: 1;
-		padding: 0.5rem 0.75rem;
-		border: 1px solid #d0d0d0;
-		border-radius: 6px;
-		font-size: 1rem;
+		padding: 0.65rem 0.875rem;
+		border: 1px solid #cbd5e1;
+		border-radius: 8px;
+		font-size: 0.95rem;
+		background: #fff;
+	}
+
+	.add-form input[type='text']:focus {
+		outline: none;
+		border-color: #34d399;
 	}
 
 	.error {
-		color: #b00020;
-		background: #fde7eb;
-		padding: 0.5rem 0.75rem;
-		border-radius: 6px;
-		margin: 0.5rem 0;
+		color: #b91c1c;
+		background: #fee2e2;
+		padding: 0.75rem 1rem;
+		border-radius: 8px;
+		margin: 0.75rem 0;
+		font-size: 0.9rem;
 	}
 
 	.empty {
-		color: #666;
+		color: #64748b;
 		text-align: center;
-		padding: 2rem 1rem;
+		padding: 3rem 1.5rem;
 		background: #fff;
-		border: 1px dashed #d0d0d0;
-		border-radius: 6px;
+		border: 2px dashed #cbd5e1;
+		border-radius: 12px;
+		font-size: 0.95rem;
 	}
 
 	table {
 		width: 100%;
-		border-collapse: collapse;
+		border-collapse: separate;
+		border-spacing: 0;
 		background: #fff;
-		border: 1px solid #e0e0e0;
-		border-radius: 6px;
+		border-radius: 12px;
 		overflow: hidden;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 	}
 
 	th,
 	td {
 		text-align: left;
-		padding: 0.6rem 0.75rem;
-		border-bottom: 1px solid #f0f0f0;
+		padding: 0.875rem 1rem;
 		vertical-align: middle;
+		border-bottom: 1px solid #e2e8f0;
 	}
 
-	th {
-		background: #f7f7f7;
-		font-size: 0.85rem;
+	thead th {
+		background: #f8fafc;
+		font-size: 0.75rem;
 		font-weight: 600;
 		text-transform: uppercase;
-		letter-spacing: 0.04em;
-		color: #555;
+		letter-spacing: 0.05em;
+		color: #475569;
+		padding-top: 0.75rem;
+		padding-bottom: 0.75rem;
 	}
 
 	tbody tr:last-child td {
 		border-bottom: none;
+	}
+
+	tbody tr {
+		transition: background-color 0.15s ease;
+	}
+
+	tbody tr:hover {
+		background: #f8fafc;
 	}
 
 	.col-status {
@@ -406,14 +444,30 @@
 	}
 
 	.col-actions {
-		width: 12rem;
+		width: 8rem;
 		text-align: right;
 		white-space: nowrap;
 	}
 
 	.col-actions button {
-		padding: 0.3rem 0.6rem;
-		font-size: 0.85rem;
+		padding: 0.4rem;
+		font-size: 1rem;
+		width: 2.5rem;
+		height: 2.5rem;
+		background: #f1f5f9;
+		color: #475569;
+		border-radius: 8px;
+	}
+
+	.col-actions button:hover {
+		background: #e2e8f0;
+		color: #0f172a;
+		transform: none;
+	}
+
+	.col-actions .danger:hover {
+		background: #fee2e2;
+		color: #b91c1c;
 	}
 
 	.col-actions form.inline {
@@ -425,29 +479,67 @@
 		align-items: center;
 		gap: 0.5rem;
 		cursor: pointer;
+		padding: 0.25rem 0.5rem;
+		border-radius: 6px;
+		transition: all 0.2s ease;
+	}
+
+	.status:hover {
+		background: #f1f5f9;
 	}
 
 	tr.bought .name {
 		text-decoration: line-through;
-		color: #888;
+		color: #94a3b8;
+	}
+
+	/* Status badge colors */
+	.status span {
+		padding: 0.2rem 0.5rem;
+		border-radius: 12px;
+		font-size: 0.8rem;
+		font-weight: 500;
+	}
+
+	.status input:checked + span {
+		background: #dcfce7;
+		color: #166534;
+	}
+
+	.status input:not(:checked) + span {
+		background: #fee2e2;
+		color: #991b1b;
 	}
 
 	.rename-form {
 		display: flex;
-		gap: 0.4rem;
+		gap: 0.5rem;
+		padding: 0.25rem;
 	}
 
 	.rename-form input[type='text'] {
 		flex: 1;
-		padding: 0.3rem 0.5rem;
-		border: 1px solid #d0d0d0;
-		border-radius: 4px;
-		font-size: 0.95rem;
+		padding: 0.5rem 0.75rem;
+		border: 1px solid #cbd5e1;
+		border-radius: 6px;
+		font-size: 0.9rem;
+		background: #fff;
+	}
+
+	.rename-form input[type='text']:focus {
+		outline: none;
+		border-color: #34d399;
 	}
 
 	.rename-form button {
-		padding: 0.3rem 0.6rem;
+		padding: 0.4rem 0.75rem;
 		font-size: 0.85rem;
+		background: #e2e8f0;
+		color: #475569;
+	}
+
+	.rename-form button:hover {
+		background: #cbd5e1;
 	}
 
 	.icon-button {
@@ -458,19 +550,29 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
+		background: #f1f5f9;
+		border-radius: 8px;
+		color: #475569;
+		transition: all 0.2s ease;
+	}
+
+	.icon-button:hover {
+		background: #e2e8f0;
+		color: #0f172a;
 	}
 
 	.sort-icon {
 		background: none;
 		border: none;
-		font-size: 0.9rem;
-		color: #666;
+		font-size: 0.85rem;
+		color: #64748b;
 		cursor: pointer;
-		padding: 0 0 0 0.4rem;
+		padding: 0 0 0 0.5rem;
 		line-height: 1;
+		transition: all 0.2s ease;
 	}
 
 	.sort-icon:hover {
-		color: #1a1a1a;
+		color: #0f172a;
 	}
 </style>
